@@ -1263,6 +1263,29 @@ def _exam_prompt_lines() -> str:
             or "- unbekannt (keine Klausurtabelle konfiguriert)")
 
 
+_WEEKDAYS_LONG_DE = ("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag",
+                     "Samstag", "Sonntag")
+
+
+def _wochenplan_block(now: "datetime | None" = None) -> str:
+    """The user's weekly rule for picking a course, or "" when there is none.
+
+    It lives next to the registry as ``wochenplan.md`` (personal, gitignored)
+    and is free text, e.g. "Mo–Fr Uni-Kurse, am Wochenende die privaten". The
+    launcher passes it through with today's weekday; applying it stays with
+    the model, like every other priority judgment."""
+    try:
+        text = (_registry_path().parent / "wochenplan.md").read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+    if not text:
+        return ""
+    now = now or datetime.now()
+    return (f"Heute ist {_WEEKDAYS_LONG_DE[now.weekday()]}, {now:%d.%m.%Y}. Wähle "
+            "den Kurs nach meinem Wochenplan:\n"
+            f"<wochenplan>\n{text}\n</wochenplan>\n\n")
+
+
 def opening_message_tutor(workspaces: list) -> str:
     exam_lines = _exam_prompt_lines()
     dossiers = "\n\n".join(_course_dossier(ws) for ws in workspaces)
@@ -1274,6 +1297,7 @@ def opening_message_tutor(workspaces: list) -> str:
         "den Kursen über die Namen zu; lies vor der Entscheidung die todo.md "
         "(und bei Bedarf fehlermuster.md) von höchstens zwei Kandidaten.\n\n"
         f"Anstehende Klausuren:\n<klausuren>\n{exam_lines}\n</klausuren>\n\n"
+        + _wochenplan_block() +
         f"Kurse:\n<dossiers>\n{dossiers}\n</dossiers>\n"
         f"{_DATA_TAGS_NOTE}\n\n"
         "Sag mir in EINEM Satz, welchen Kurs du wählst und warum — und dann ohne "
@@ -1395,7 +1419,7 @@ def opening_message_quickie(workspaces: list, streak: int = 0, total: int = 0) -
             "Fehlermuster, das sich in 5 Minuten knacken lässt); wechsle über die "
             "Tage durch, nicht immer derselbe. Ordne die Klausuren den Kursen über "
             "die Namen zu.\n\n"
-            + exams + "\n" +
+            + exams + "\n" + _wochenplan_block() +
             f"Kurse:\n<dossiers>\n{dossiers}\n</dossiers>\n"
             f"{_DATA_TAGS_NOTE}\n\n"
         )

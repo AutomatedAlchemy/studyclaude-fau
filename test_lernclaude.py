@@ -579,6 +579,22 @@ _EXAM_TABLE = """# Prüfungen
 """
 
 
+def test_wochenplan_reaches_the_course_pick(tmp_path):
+    """No wochenplan.md next to the registry means no block; with one, the
+    Quickie and Tutors Choice get it verbatim with today's weekday."""
+    a, b = str(tmp_path / "A"), str(tmp_path / "B")
+    for ws in (a, b):
+        Path(ws).mkdir()
+    assert m._wochenplan_block() == ""
+    (tmp_path / "wochenplan.md").write_text("Mo–Fr: A\nSa–So: B\n", encoding="utf-8")
+    block = m._wochenplan_block(now=datetime.datetime(2026, 10, 3, 7, 0))
+    assert block.startswith("Heute ist Samstag, 03.10.2026.")
+    assert "<wochenplan>\nMo–Fr: A\nSa–So: B\n</wochenplan>" in block
+    assert "<wochenplan>" in m.opening_message_quickie([a, b], 1, 2)
+    assert "<wochenplan>" in m.opening_message_tutor([a, b])
+    assert "<wochenplan>" not in m.opening_message_quickie([a], 1, 2)  # one course: no pick
+
+
 def test_exam_table_parsing(tmp_path, monkeypatch):
     """Future rows only, soonest first, weekday re-derived, bare dates roll
     into next year, settled rows (~~, abgelegt) and tables without a date

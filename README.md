@@ -53,6 +53,8 @@ into `_archiv/` beside it · `q` quits. Untouched for ten seconds it autostarts 
 | `lernen --gaertner [PFAD…]` | Gärtner: a maintenance session, no studying. You tell it in chat which courses to clean up, merge or revise; the paths are its focus |
 
 Mechanics of the four modes, the streak and the dossiers: [docs/modes.md](docs/modes.md).
+To steer which course Tutors Choice and the Quickie pick on which weekday, put a
+plain-text rule into `data/wochenplan.md` ([docs/modes.md § Wochenplan](docs/modes.md#wochenplan)).
 Other flags: `--list` (`*` marks the default), `--set-default`, `--set-medium`,
 `--set-model`, `--set-effort`, `--add` (guided onboarding), `--register`,
 `--unregister`, `--print-prompt`, `--dry-run`, `--install [ws]`, `--remove [ws]`.

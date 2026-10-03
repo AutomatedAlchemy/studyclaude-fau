@@ -50,6 +50,22 @@ launcher never judges whether you finished. `lernen --set-default quickie`
 
 The Quickie never builds a course overview.
 
+## Wochenplan
+
+Tutors Choice and the Quickie pick a course on their own. To steer that pick by
+weekday, write a plain-text rule into `data/wochenplan.md`, next to the registry
+(with `LERNCLAUDE_REGISTRY` set, next to that file). For example: "Monday to
+Friday the university courses, on weekends the languages; an exam within 7 days
+always comes first." Copy
+[`templates/wochenplan.example.md`](../templates/wochenplan.example.md) as a
+starting point and name courses by their folder name.
+
+The launcher does not parse the rule. It passes the text, together with today's
+weekday and date, into the opening message, and the session applies it when it
+picks. Without the file, or with an empty one, nothing changes. The file is
+personal and gitignored, like the registry. A Quickie with only one course
+registered has no pick to make and ignores it.
+
 ## Meta-Häppchen
 
 A Meta-Häppchen is one short Häppchen in a **target** course, written with the

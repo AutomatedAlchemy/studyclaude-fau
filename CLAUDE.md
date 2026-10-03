@@ -143,6 +143,13 @@ common root, `$HOME` fallback) and the chosen workspace's CLAUDE.md is read, not
 auto-loaded — `_assemble_tutor_prompt` says so. The priority judgment stays with
 the model, not a launcher-side heuristic (SSoT boundary).
 
+**Wochenplan.** An optional free-text `wochenplan.md` next to the registry
+(`data/`, personal, gitignored) says which courses fit which weekdays.
+`_wochenplan_block` passes it verbatim in `<wochenplan>` tags, with today's
+weekday, into the Tutors Choice opening and the multi-course Quickie pick. No
+file or an empty file adds nothing. The launcher never parses the plan; the
+Gärtner keeps it current when courses are added or removed.
+
 The registry `default` may hold the `__TUTOR__` sentinel: `d` on the row or
 `--set-default tutor` writes it, and the menu autostart then routes to the tutor
 pick. Registration never claims the default any more — an unset default resolves

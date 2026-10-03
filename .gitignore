@@ -1,5 +1,6 @@
 # Your course list — tool-local mutable state, never committed.
 data/registry.json
+data/wochenplan.md
 data/*.sync-conflict-*
 
 __pycache__/
