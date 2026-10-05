@@ -144,7 +144,8 @@ persists in the registry.
 
 Picking a `fau:` model launches through `fauclaude` instead of `claude`, with
 `LERNCLAUDE_BACKEND` forcing the launcher regardless of the model. That path
-needs an NHR@FAU account and the author's private `fauclaude` repo.
+needs an NHR@FAU account and `fauclaude` from
+[fau-agents](https://github.com/AutomatedAlchemy/fau-agents).
 
 A workspace itself is a normal folder with your material plus a `CLAUDE.md`.
 Onboarding stamps a minimal skeleton (`CLAUDE.md`, `todo.md`, `fehlermuster.md`,

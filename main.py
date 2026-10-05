@@ -338,10 +338,14 @@ def _resolve_fauclaude_cmd() -> list[str]:
     if path_executable:
         return [path_executable]
 
-    candidate_scripts: list[Path] = [
-        SCRIPT_DIR.parents[1] / "MatSci" / "NHR" / "fauclaude" / "main.py",
-        Path.home() / "Synced" / "repos" / "MatSci" / "NHR" / "fauclaude" / "main.py",
-    ]
+    # fau-agents next to this checkout (the alchemy-installer layout), else the
+    # checkout its own --install recorded.
+    candidate_scripts: list[Path] = [SCRIPT_DIR.parent / "fau-agents" / "fauclaude" / "main.py"]
+    pointer = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config") / "fau-agents" / "checkout"
+    try:
+        candidate_scripts.append(Path(pointer.read_text(encoding="utf-8").strip()) / "fauclaude" / "main.py")
+    except OSError:
+        pass
     resolved_script = next((candidate for candidate in candidate_scripts if candidate.is_file()), None)
     if resolved_script is None:
         return ["fauclaude"]
