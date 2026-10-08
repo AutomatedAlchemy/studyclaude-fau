@@ -380,6 +380,10 @@ Agent call. The two places that start subagents by design name the model
 themselves: the explainer clip in `templates/media/board.md` and step 3 of
 `blatt_finder.py --help`. An explicit model is needed because a subagent
 without one inherits the session's model, which defaults to opus.
+On `fau`, `_subagent_rule` tells a fauclaude session the opposite: no model
+at all, even where the medium file or a tool names one, so subagents inherit
+the session's `fau:` model. fauclaude maps only haiku to a gateway model;
+sonnet and opus have none.
 
 The pick is used exactly as set — there is no tier detection and no clamp
 (user, 2026-09-16). `auto`, the `LERNCLAUDE_MODEL` / `LERNCLAUDE_EFFORT`

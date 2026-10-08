@@ -325,6 +325,9 @@ def test_backend_fauclaude_launches(tmp_path, monkeypatch, spawns):
     # Both flags are always concrete now that `auto` is gone.
     assert argv[argv.index("--effort") + 1] == m.DEFAULT_EFFORT
     assert "--append-system-prompt" in argv
+    # the gateway has no sonnet: subagents inherit the session's fau: model
+    sys_prompt = argv[argv.index("--append-system-prompt") + 1]
+    assert "ohne Modellangabe" in sys_prompt and "model: sonnet" not in m._subagent_rule()
 
     # explicit model and effort are passed through
     m._set_model("gpt-oss-120b")
