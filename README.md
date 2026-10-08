@@ -147,6 +147,9 @@ Picking a `fau:` model launches through `fauclaude` instead of `claude`, with
 needs an NHR@FAU account and `fauclaude` from
 [fau-agents](https://github.com/AutomatedAlchemy/fau-agents).
 
+Subagents a session starts (explainer clips, the Blatt-Finder mapping) run on
+Sonnet, or Haiku for simple work, never on Opus.
+
 A workspace itself is a normal folder with your material plus a `CLAUDE.md`.
 Onboarding stamps a minimal skeleton (`CLAUDE.md`, `todo.md`, `fehlermuster.md`,
 `Personalisierte_Übungen/`) and never overwrites an existing file. Layout, the

@@ -363,6 +363,7 @@ def test_prompts_orient_without_reencoding_the_procedure(tmp_path, monkeypatch):
         for forbidden in ("cheatsheet", "basics.pdf", "haeppchen_"):
             assert forbidden not in text, (name, forbidden)
         assert "Fortschritt: x/y Häppchen" in text, name    # the menu reads that line
+        assert "model: sonnet" in text and "model: opus" not in text, name   # subagents
     # the Kursübersicht: the launcher only says "build it first" and names the
     # template the section is copied from — the content stays in the course CLAUDE.md
     template_path = str(m.TEMPLATE_DIR / "LERNLOOP_TEMPLATE.md")
@@ -374,6 +375,7 @@ def test_prompts_orient_without_reencoding_the_procedure(tmp_path, monkeypatch):
     assert template_path not in m.opening_message(a)         # confirmed: no nudge
     assert "Übersicht: bestätigt 2026-09-02" in m.opening_message_tutor([a, b])
     assert "Kursübersicht" in m.opening_message_onboard()
+    assert "Bedienung des Boards" in m._assemble_onboard_prompt()   # builds it in the medium
     # the Blatt-Finder: the launcher names the tool, the step itself is the
     # course CLAUDE.md's and the tool's --help
     finder = m.TEMPLATE_DIR / "tools" / "blatt_finder.py"

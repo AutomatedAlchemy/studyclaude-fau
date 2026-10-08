@@ -478,7 +478,10 @@ def _prompt_common() -> str:
         "normaler/Unicode-Notation (z.B. √, x², ∫, ≤, λ, x_1, Brüche als "
         "(a+b)/c). Das gilt nur für den Chat: in den .tex-Dateien der Häppchen "
         "und überall, wo das Arbeitsmedium LaTeX rendert (Tutor Board), "
-        "schreibst du LaTeX wie in der Medium-Mechanik unten beschrieben.\n"
+        "schreibst du LaTeX wie in der Medium-Mechanik unten beschrieben.\n\n"
+        "Subagenten (Agent-Tool) startest du immer mit ausdrücklichem Modell: "
+        "`model: sonnet`, für einfache Arbeit wie Suchen oder Abschreiben "
+        "`model: haiku`. Nie opus.\n"
         "</orientierung>\n\n"
         f"<heute>\n# Heute: {today}\n</heute>\n"
     )
@@ -734,6 +737,17 @@ def opening_message_onboard() -> str:
     )
 
 
+def _assemble_onboard_prompt() -> str:
+    """System prompt for the onboarding session. It builds the Kursübersicht in
+    the active medium, so it needs the medium mechanics like every session."""
+    return (
+        "Du hilfst dem User, einen neuen Lern-Loop-Kurs für das Tool 'lernclaude' anzulegen: "
+        "gemeinsam einen Ordner für Material + personalisierte Lern-Dateien finden/festlegen, "
+        "dann per angegebenem Befehl registrieren.\n\n"
+        + _prompt_common()
+    )
+
+
 def do_add() -> int:
     """Launch an interactive onboarding session (inline: takes over the menu terminal).
 
@@ -742,18 +756,10 @@ def do_add() -> int:
     """
     root = _material_root()
     workdir = root if os.path.isdir(root) else str(Path.home())
-    today = datetime.now().strftime("%A %Y-%m-%d")
-    sys_prompt = (
-        "Du hilfst dem User, einen neuen Lern-Loop-Kurs für das Tool 'lernclaude' anzulegen: "
-        "gemeinsam einen Ordner für Material + personalisierte Lern-Dateien finden/festlegen, "
-        "dann per angegebenem Befehl registrieren. Erklärungen im Chat OHNE LaTeX — Unicode-"
-        "Notation (√, x², ∫, ≤, λ).\n\n"
-        f"---\n# Heute: {today}\n"
-    )
     inner = [
         *_backend_cmd(),
         *_backend_model_args(),
-        "--append-system-prompt", sys_prompt,
+        "--append-system-prompt", _assemble_onboard_prompt(),
         opening_message_onboard(),
     ]
     env = _launch_env()

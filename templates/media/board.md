@@ -191,8 +191,8 @@ Wiedererkennung (Listen, Begriffspaare, Ankreuz-Drills) bekommt keinen Clip.
 
 - **Reihenfolge:** Tab bauen, im Fortschritt eintragen, `select_tab` — **dann** den
   Clip anstoßen. Der User wartet nie auf einen Render.
-- **Per Opus-Subagent, nicht im eigenen Kontext** (Token-Sparsamkeit): `Agent` mit
-  `model: opus`, Auftrag = Skill `manim-kit` laden, eine Szene, 15–25 s, eine Idee,
+- **Per Sonnet-Subagent, nicht im eigenen Kontext** (Token-Sparsamkeit; Nutzervorgabe 08.10.2026: Subagenten nie auf Opus): `Agent` mit
+  `model: sonnet`, Auftrag = Skill `manim-kit` laden, eine Szene, 15–25 s, eine Idee,
   **1080p bei 60 fps** (`-q h`, manim-kit-Standard; Nutzervorgabe 18.09.2026, nie Draft-Qualität), unter 8 MB je Clip (längere Videos als Einzelclips, nicht herunterkomprimieren), die Standard-Tonspur/Musik des manim-kit **nicht** abbestellen;
   Rückgabe **nur** der mp4-Pfad (oder
   `RENDER FAILED: <Grund>`).
