@@ -2,7 +2,7 @@
 
 Each subject gets a **workspace** — a normal directory holding your lecture
 PDFs, past papers, and problem sets, plus a `CLAUDE.md` describing how you want
-to study *that* subject. `lernen <workspace>` starts Claude with its working
+to study *that* subject. `studyclaude <workspace>` starts Claude with its working
 directory set there, so Claude Code loads that `CLAUDE.md` automatically and
 follows it. Improve the loop by editing a workspace's `CLAUDE.md`, not the
 launcher code.
@@ -85,8 +85,8 @@ Sessions work in one of two media: **Xournal++ + Firefox** (exercise PDF in the
 browser, calculations on a separate `.xopp` sheet) or a **Tutor Board** (a web
 whiteboard with one tab per exercise; it needs an account on the author's
 service, see the README). The active medium is a single launcher-level switch —
-toggle it with `m` in the menu, `lernen --set-medium xournalpp|board`, or
-`LERNCLAUDE_MEDIUM` — not a per-course fact.
+toggle it with `m` in the menu, `studyclaude --set-medium xournalpp|board`, or
+`STUDYCLAUDE_MEDIUM` — not a per-course fact.
 
 The mechanics of each medium live in `templates/media/<name>.md` and ride into
 every session via the system prompt; course workspaces carry no medium

@@ -1,7 +1,7 @@
 """Detect the host's Claude subscription tier and map it to a model + effort.
 
 Standalone, stdlib-only. Vendored from the author's `_shared/claude_tier.py` so
-lernclaude has no import dependency on the monorepo it grew up in.
+studyclaude has no import dependency on the monorepo it grew up in.
 
     Max  -> opus   + effort medium
     Pro  -> sonnet + effort medium
@@ -17,7 +17,7 @@ host — the same synced checkout gives opus on a Max box and sonnet on a Pro bo
 without any per-host configuration.
 
 Overrides, in precedence order:
-    LERNCLAUDE_MODEL / LERNCLAUDE_EFFORT  pin the launch directly (skip detection)
+    STUDYCLAUDE_MODEL / STUDYCLAUDE_EFFORT  pin the launch directly (skip detection)
     CLAUDE_TIER_OVERRIDE                  force a tier ("max" / "pro")
     CLAUDE_CONFIG_FILE                    read a different config path
 

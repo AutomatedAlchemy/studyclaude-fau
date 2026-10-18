@@ -1,4 +1,4 @@
-# lernclaude
+# studyclaude
 
 A stdlib-only launcher that starts [Claude Code](https://claude.com/claude-code)
 inside an exam-prep folder, so that folder's `CLAUDE.md` drives the study loop:
@@ -8,9 +8,12 @@ launcher encodes no study procedure: about 2000 lines that pick a folder, pick a
 model and send a "let's study" trigger, so you improve the loop by editing a
 workspace's `CLAUDE.md`, not this code. Tested on Linux with KDE.
 
-This is the FAU variant of lernclaude. It adds the NHR@FAU gateway backend
+This is the FAU variant of studyclaude. It adds the NHR@FAU gateway backend
 (`fauclaude`, `fau:` models); the public base is
-<https://github.com/AutomatedAlchemy/lernclaude>.
+<https://github.com/AutomatedAlchemy/studyclaude>.
+
+Formerly **lernclaude** (renamed 2026-10-18): the alias `lernen` is now
+`studyclaude`, and the environment variables `LERNCLAUDE_*` are now `STUDYCLAUDE_*`.
 
 > **The tool speaks German** — prompts, workspace template, menu. The loop itself
 > is language-agnostic: [docs/workspace.md](docs/workspace.md#using-it-in-another-language).
@@ -24,10 +27,10 @@ This is the FAU variant of lernclaude. It adds the NHR@FAU gateway backend
 ## Install
 
 ```bash
-git clone https://github.com/AutomatedAlchemy/lernclaude-fau.git
-cd lernclaude-fau
+git clone https://github.com/AutomatedAlchemy/studyclaude-fau.git
+cd studyclaude-fau
 python3 main.py          # menu; first entry is "neuen Kurs anlegen"
-python3 main.py --install # desktop icon + `lernen` alias
+python3 main.py --install # desktop icon + `studyclaude` alias
 ```
 
 *neuen Kurs anlegen* starts a Claude session that searches your filesystem with
@@ -38,28 +41,33 @@ says what is missing, and the tool still runs by path.
 
 ## Usage
 
-A bare `lernen` opens a curses picker of your registered courses, exam banner
-above, progress note per row. `↑`/`↓` move · `Enter` starts · `Space` opens the
+A bare `studyclaude` opens a curses picker of your registered courses, exam banner
+above, progress note per row. The top row is the Begleiter, the default persona.
+`↑`/`↓` move · `Enter` starts · `Space` opens the
 Meta multiselect · `g` Gärtner · `m` medium · `o` model · `e` effort · `d`
 default · `x` removes the course from the menu, and on request moves its folder
 into `_archiv/` beside it · `q` quits. Untouched for ten seconds it autostarts your default.
 
 | Launch | What it does |
 |---|---|
-| `lernen <workspace>` | Run that course's Lern-Loop; `--menu` forces the menu instead |
-| `lernen --tutor` | Tutors Choice: one session picks the most urgent course from per-course dossiers and tutors it |
-| `lernen --quickie` | One short, winnable Häppchen (about 5 min); counts a daily streak |
-| `lernen --meta [ZIEL QUELLE…]` | Meta-Häppchen: one short Häppchen in ZIEL shaped by the QUELLE courses; bare reuses the last combination |
-| `lernen --gaertner [PFAD…]` | Gärtner: a maintenance session, no studying. You tell it in chat which courses to clean up, merge or revise; the paths are its focus |
+| `studyclaude <workspace>` | Run that course's Lern-Loop; `--menu` forces the menu instead |
+| `studyclaude --begleiter` | Begleiter (the default): one session over all courses checks the timetable for the current time and helps with what is due — a lecture running now, starting soon or just ended, a deadline, or a Häppchen in free time |
+| `studyclaude --tutor` | Tutors Choice: one session picks the most urgent course from per-course dossiers and tutors it |
+| `studyclaude --quickie` | One short, winnable Häppchen (about 5 min); counts a daily streak |
+| `studyclaude --meta [ZIEL QUELLE…]` | Meta-Häppchen: one short Häppchen in ZIEL shaped by the QUELLE courses; bare reuses the last combination |
+| `studyclaude --gaertner [PFAD…]` | Gärtner: a maintenance session, no studying. You tell it in chat which courses to clean up, merge or revise; the paths are its focus |
 
-Mechanics of the four modes, the streak and the dossiers: [docs/modes.md](docs/modes.md).
-To steer which course Tutors Choice and the Quickie pick on which weekday, put a
+Mechanics of the five modes, the streak and the dossiers: [docs/modes.md](docs/modes.md).
+The Begleiter reads who you are and where your timetable lives from a tab
+„Profil“ on a Tutor Board named „studyclaude“; without it, it asks you in chat
+([docs/modes.md § Begleiter](docs/modes.md#begleiter)).
+To steer which course the Begleiter, Tutors Choice and the Quickie pick on which weekday, put a
 plain-text rule into `data/wochenplan.md` ([docs/modes.md § Wochenplan](docs/modes.md#wochenplan)).
 Other flags: `--list` (`*` marks the default), `--set-default`, `--set-medium`,
 `--set-model`, `--set-effort`, `--add` (guided onboarding), `--register`,
 `--unregister`, `--print-prompt`, `--dry-run`, `--install [ws]`, `--remove [ws]`.
 
-**Starting on login:** no `lernen` flag. Tick **Auto-Start** in the
+**Starting on login:** no `studyclaude` flag. Tick **Auto-Start** in the
 `cli-tools-kit` installer (pre-ticked via `default_autostart`); it symlinks the
 icon into `~/.config/autostart` and clears it on removal. What starts is the menu
 with its countdown, so you can always get out.
@@ -69,15 +77,15 @@ with its countdown, so you can always get out.
 Sessions work either in **Xournal++ + Firefox** (the default: exercise PDF in the
 browser, calculations on a separate `.xopp` sheet) or on a **Tutor Board** (a web
 whiteboard, one tab per exercise, needs an account on the author's invite-only
-service). Switch with `m`, `lernen --set-medium xournalpp|board` or
-`LERNCLAUDE_MEDIUM`; verbal mid-session switch and per-course pin in
+service). Switch with `m`, `studyclaude --set-medium xournalpp|board` or
+`STUDYCLAUDE_MEDIUM`; verbal mid-session switch and per-course pin in
 [docs/workspace.md](docs/workspace.md#the-medium-switch).
 
 **Tutor Board** lives at <https://beta.probable.work>. An agent connects as an
 MCP (Model Context Protocol) connector, `https://beta.probable.work/mcp`, with
 OAuth 2.1 + PKCE (Proof Key for Code Exchange); live docs at
 <https://beta.probable.work/setup.md> and <https://beta.probable.work/agent.md>.
-lernclaude ships no MCP client and no credentials — those come from your own
+studyclaude ships no MCP client and no credentials — those come from your own
 Claude Code MCP config. Status 2026-09-16: multi-user yes, several agents in
 parallel on one account not safe yet, one agent per account link.
 
@@ -90,7 +98,7 @@ answers the selected question. See
 
 ## The exam banner
 
-Set `LERNCLAUDE_EXAMS` (or the registry key `"exams_file"`) to a markdown file of
+Set `STUDYCLAUDE_EXAMS` (or the registry key `"exams_file"`) to a markdown file of
 exam dates and the menu lists the upcoming ones above the courses: soonest first,
 days left, red inside three days, yellow inside ten. Unset, no banner. It reads
 every table with **both** a date column (`Termin`, `Datum`, `Date`, `When`) and a
@@ -123,13 +131,13 @@ All optional.
 
 | Variable | Effect |
 |---|---|
-| `LERNCLAUDE_REGISTRY` | Path to the course registry (default: `./data/registry.json`) |
-| `LERNCLAUDE_DEFAULT_WORKSPACE` | Override the registered default for one launch |
-| `LERNCLAUDE_ROOT` | Where guided onboarding starts searching (default: `$HOME`) |
-| `LERNCLAUDE_EXAMS` | Markdown file with your exam-date table (banner off when unset; registry key `exams_file` does the same) |
-| `LERNCLAUDE_BACKEND` | Override the active backend for one launch (`claude` \| `fauclaude`) |
-| `LERNCLAUDE_FAUCLAUDE_CMD` | Explicit command / arguments to launch fauclaude |
-| `LERNCLAUDE_MEDIUM` | Override the working medium for one launch (`xournalpp` \| `board`) |
+| `STUDYCLAUDE_REGISTRY` | Path to the course registry (default: `./data/registry.json`) |
+| `STUDYCLAUDE_DEFAULT_WORKSPACE` | Override the registered default for one launch |
+| `STUDYCLAUDE_ROOT` | Where guided onboarding starts searching (default: `$HOME`) |
+| `STUDYCLAUDE_EXAMS` | Markdown file with your exam-date table (banner off when unset; registry key `exams_file` does the same) |
+| `STUDYCLAUDE_BACKEND` | Override the active backend for one launch (`claude` \| `fauclaude`) |
+| `STUDYCLAUDE_FAUCLAUDE_CMD` | Explicit command / arguments to launch fauclaude |
+| `STUDYCLAUDE_MEDIUM` | Override the working medium for one launch (`xournalpp` \| `board`) |
 
 Registered courses live in the gitignored `data/registry.json`, in the tool's own
 directory rather than `~/.config`, so a synced or shared checkout carries the same

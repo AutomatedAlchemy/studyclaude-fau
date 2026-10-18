@@ -3,7 +3,7 @@
 > Generalisiertes Lern-Loop-Muster (Prototyp: Math DS 2). Diese Datei wurde von
 > der Kurs-Anlage in den Materialordner gestempelt. Die anlegende Claude-Instanz
 > füllt die «Platzhalter» aus dem vorhandenen Material aus.
-> Gestartet wird der Loop über `lernen «dieser Ordner»` (eigenes Desktop-Icon möglich).
+> Gestartet wird der Loop über `studyclaude «dieser Ordner»` (eigenes Desktop-Icon möglich).
 
 ## Eckdaten (beim Anlegen ausfüllen)
 
@@ -82,7 +82,7 @@ höchstens 6 Sätze, je Material ein Halbsatz.
 
 Ort: im Arbeitsmedium (Mechanik im Systemprompt), nicht als Datei — der Lerner
 sieht nur das Medium. Buchung: genau eine Zeile `Übersicht: bestätigt YYYY-MM-DD`
-in `todo.md` (bis dahin `Übersicht: fehlt`); das `lernen`-Startmenü liest genau
+in `todo.md` (bis dahin `Übersicht: fehlt`); das `studyclaude`-Startmenü liest genau
 diese Zeile. Bei Neubestätigung das Datum ersetzen.
 
 ## Die drei Kern-Dateien
@@ -92,7 +92,7 @@ diese Zeile. Bei Neubestätigung das Datum ersetzen.
   Enthält die Zeile `Fortschritt: x/y Häppchen` am Zeilenanfang (`**…**` erlaubt) —
   x = reviewte Häppchen, y = aktuelle Schätzung, wie viele Häppchen es insgesamt bis zur
   Klausurbereitschaft braucht. y ist eine lebende Schätzung (nach jedem Review neu bewerten,
-  gern anhand der Themenkarte). Das `lernen`-Startmenü liest die **letzte** solche Zeile:
+  gern anhand der Themenkarte). Das `studyclaude`-Startmenü liest die **letzte** solche Zeile:
   du kannst die eine Zeile oben pflegen oder pro Sitzung eine neue anhängen. Im Fließtext
   erwähnte Zahlen gehören eingerückt, nie an den Zeilenanfang.
   Zweite Pflichtzeile: `Übersicht: bestätigt YYYY-MM-DD` (siehe §Kursübersicht).
@@ -149,7 +149,7 @@ geändert, verschoben oder gelöscht.
 ## Lern-Loop (der Kern)
 
 **0. Arbeitsmedium** — kommt vom Launcher, nicht aus dieser Datei: der Umschalter
-im `lernen`-Startmenü (`m`) bestimmt Xournal++ oder Tutor Board, und die Mechanik
+im `studyclaude`-Startmenü (`m`) bestimmt Xournal++ oder Tutor Board, und die Mechanik
 des aktiven Mediums steht im Systemprompt der Session. **Nicht erfragen.** Der
 User darf **mitten im Lernen wechseln** („lass uns aufs Board", „zurück zu
 Xournal") — dann ab dem nächsten Häppchen im neuen Medium weiterarbeiten und ihn

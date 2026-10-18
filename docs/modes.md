@@ -1,13 +1,40 @@
 # Launch modes in detail
 
-The menu and the flags in the [README](../README.md) start five kinds of session.
-A plain course launch just runs that workspace's Lern-Loop. The other four are
+The menu and the flags in the [README](../README.md) start six kinds of session.
+A plain course launch just runs that workspace's Lern-Loop. The other five are
 described here.
+
+## Begleiter
+
+The Begleiter is the default persona and the menu's top row as soon as one
+course is registered. Picking it (or running `studyclaude --begleiter`) launches
+one session at the courses' common parent folder, like the Gärtner, with every
+course's dossier, your upcoming exams, the Wochenplan and the current time. It
+works from the clock:
+
+1. It reads your profile: the tab „Profil“ on a Tutor Board named „studyclaude“.
+   The profile says who you are (programme, semester), where your timetable is
+   (a calendar, a file, another board's tab) and where the semester's material
+   lies. It is free text. The repo holds no personal data, so the profile lives
+   on your board. Without a board, or without the tab, the session asks you for
+   these facts in chat and offers to create the tab.
+2. It checks the timetable the profile names: what runs now, what just ended,
+   what comes later today, and deadlines until tomorrow.
+3. It picks what is due: following a lecture that is running, preparing one that
+   starts within the hour, reviewing one that just ended, a deadline, or — in free
+   time — a course by Wochenplan, exams and dossiers, and the next Häppchen from
+   its Lern-Loop.
+4. It tells you in at most three lines what is on now, what comes later and what
+   it suggests, and then starts.
+
+It is the automatic default whenever you never chose one, and `d` on its row or
+`studyclaude --set-default begleiter` sets it explicitly. The board „studyclaude“
+holds only the profile; Häppchen go on each course's own board.
 
 ## Tutors Choice
 
 With two or more courses registered, the menu's top row is **Tutors Choice**.
-Picking it (or running `lernen --tutor`) launches one interactive session,
+Picking it (or running `studyclaude --tutor`) launches one interactive session,
 exactly like starting a course — except its opening message carries a compact,
 mechanically extracted dossier per course (progress line, days since last
 activity, Themenkarte size, created/reviewed Häppchen counts, the dominant
@@ -20,18 +47,16 @@ session — no hidden pre-pass, no wait at the menu. It starts at the courses'
 common parent folder so it can work across all of them.
 
 Tutors Choice can itself be the default: press `d` on its row, or run
-`lernen --set-default tutor` — the 10s autostart then runs the tutor pick. It
-is also the automatic default whenever you have two or more courses and never
-explicitly chose one, so a fresh install autostarts into Tutors Choice as soon
-as there is a real choice. (Scripted flags like `--dry-run` need a concrete
-folder and fall back to the first course.)
+`studyclaude --set-default tutor` — the 10s autostart then runs the tutor pick.
+(Scripted flags like `--dry-run` need a concrete folder and fall back to the
+first course.)
 
 ## Quickie
 
 The menu's very top row (shown as soon as one course exists) is **⚡ Quickie**
 — one short Häppchen, about five minutes, nothing else. It is the low-threshold
 entry for days when a full session feels like too much: pick it (or run
-`lernen --quickie`) and the session greets you in one sentence, picks a course
+`studyclaude --quickie`) and the session greets you in one sentence, picks a course
 in half a sentence when there are several (no file reading first — the dossiers
 suffice), and opens one small, self-contained, deliberately *winnable* task in
 the active medium, following that course's `CLAUDE.md` mechanics scaled down to
@@ -45,7 +70,7 @@ The launcher keeps a streak in the registry (`quickies`: last date, days in a
 row, total) and shows it on the row — `· Serie: 3 Tage` while the streak is
 alive (a Quickie today or yesterday), `· bisher 12` otherwise. The session gets
 the numbers to mention in its greeting. A launch counts as a Quickie; the
-launcher never judges whether you finished. `lernen --set-default quickie`
+launcher never judges whether you finished. `studyclaude --set-default quickie`
 (or `d` on the row) makes it the 10s autostart target.
 
 The Quickie never builds a course overview.
@@ -54,7 +79,7 @@ The Quickie never builds a course overview.
 
 Tutors Choice and the Quickie pick a course on their own. To steer that pick by
 weekday, write a plain-text rule into `data/wochenplan.md`, next to the registry
-(with `LERNCLAUDE_REGISTRY` set, next to that file). For example: "Monday to
+(with `STUDYCLAUDE_REGISTRY` set, next to that file). For example: "Monday to
 Friday the university courses, on weekends the languages; an exam within 7 days
 always comes first." Copy
 [`templates/wochenplan.example.md`](../templates/wochenplan.example.md) as a
@@ -86,18 +111,18 @@ source, `Esc` goes back. The selection is remembered in the registry (`meta`:
 target, sources, total), and the multiselect opens pre-checked with it next
 time. Once something is remembered, a row `⇄ Meta-Häppchen — Mathe + Spanisch
 → Physik` appears under Tutors Choice: `Enter` repeats the combination, `d`
-makes it the 10s autostart target (`lernen --set-default meta` does the same),
+makes it the 10s autostart target (`studyclaude --set-default meta` does the same),
 and it disappears while one of its courses is unregistered.
 
-From a script: `lernen --meta ZIEL QUELLE [QUELLE…]` launches and remembers an
+From a script: `studyclaude --meta ZIEL QUELLE [QUELLE…]` launches and remembers an
 explicit combination (unregistered paths get registered, like `--set-default`);
-bare `lernen --meta` reuses the remembered one; `lernen --print-prompt --meta …`
+bare `studyclaude --meta` reuses the remembered one; `studyclaude --print-prompt --meta …`
 shows the system prompt without launching or remembering.
 
 ## Gärtner
 
 The Gärtner is a maintenance session, not a study session: no Häppchen, no
-tutoring. Press `g` in the menu (or run `lernen --gaertner`) and tell it in chat
+tutoring. Press `g` in the menu (or run `studyclaude --gaertner`) and tell it in chat
 what to do with your courses — clean one up, merge two into one, revise a
 course's `CLAUDE.md` against the current template. It gets every course's
 dossier and your upcoming exams, greets you, names up to three things it notices
@@ -106,12 +131,12 @@ asks what you want to tackle. It starts at the courses' common parent folder.
 
 Courses checked in the multiselect (`Space`) when you press `g` are named as
 the focus; the others are there for comparison and change only when you say so.
-From a script, `lernen --gaertner PFAD…` sets the focus; a path that is not
+From a script, `studyclaude --gaertner PFAD…` sets the focus; a path that is not
 registered is shown but not registered.
 
 Before anything that moves, deletes or merges files, or changes the course list,
 it shows a short plan and waits for your OK. It changes the course list only
-through `lernen --register` / `--unregister`, never by editing the registry file,
+through `studyclaude --register` / `--unregister`, never by editing the registry file,
 and moves what should go into `_archiv/` inside the course instead of deleting
 it, unless you ask for deletion. After a merge it re-estimates the `Fortschritt:`
 line and sets `Übersicht: fehlt`, so the next study session builds a new overview.
