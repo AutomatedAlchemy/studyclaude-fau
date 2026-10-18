@@ -2159,7 +2159,7 @@ def _menu_loop(stdscr, data: dict):
                 label = "Neuen Kurs / Pfad hinzufügen …"
                 base = C["add"]
             elif row == _BEGLEITER_SENTINEL:
-                label = "☀ Begleiter — schaut in den Stundenplan und hilft bei dem, was jetzt dran ist"
+                label = "☀ Begleiter — was laut Stundenplan jetzt dran ist"
                 base = C["begleiter"]
             elif row == _QUICKIE_SENTINEL:
                 label = "⚡ Quickie — ein kurzes Häppchen" + _quickie_suffix(data)
