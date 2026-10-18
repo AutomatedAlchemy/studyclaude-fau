@@ -636,6 +636,7 @@ def test_exam_table_parsing(tmp_path, monkeypatch):
     into next year, settled rows (~~, abgelegt) and tables without a date
     column are ignored — and no configured file means no banner, no error."""
     assert m.upcoming_exams() == []
+    assert "keine Klausurtabelle konfiguriert" in m._exam_prompt_lines()
     f = tmp_path / "Pruefungen.md"
     f.write_text(_EXAM_TABLE, encoding="utf-8")
     monkeypatch.setenv("STUDYCLAUDE_EXAMS", str(f))
@@ -646,6 +647,7 @@ def test_exam_table_parsing(tmp_path, monkeypatch):
     assert rows[2][1] == "Di 12.01. 08:00" and rows[2][0] > 100   # January = next year
     f.write_text("| Fach | Termin |\n|---|---|\n| X | garbage |\n", encoding="utf-8")
     assert m.upcoming_exams() == []                           # fail into silence
+    assert m._exam_prompt_lines() == f"- kein kommender Termin mit Datum in {f}"
 
 
 class MockCursesScreen:
