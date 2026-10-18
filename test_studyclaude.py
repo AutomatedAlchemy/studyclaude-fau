@@ -185,7 +185,7 @@ def test_backend_autoselection_from_model(monkeypatch):
     assert "auto" not in models                              # removed 2026-09-16
     m._set_model("sonnet")
     assert m._current_backend() == "claude"
-    monkeypatch.setenv("LERNCLAUDE_BACKEND", "fauclaude")
+    monkeypatch.setenv("STUDYCLAUDE_BACKEND", "fauclaude")
     assert m._current_backend() == "fauclaude"               # env override wins
 
 
@@ -328,7 +328,7 @@ def test_gaertner_sees_every_course_and_keeps_no_state(tmp_path, spawns):
 def test_backend_fauclaude_launches(tmp_path, monkeypatch, spawns):
     a, b = _courses(tmp_path, "A", "B")
     m._set_model("deepseek-ai/DeepSeek-V4-Flash-0731")
-    monkeypatch.setenv("LERNCLAUDE_FAUCLAUDE_CMD", "fauclaude-custom --opt")
+    monkeypatch.setenv("STUDYCLAUDE_FAUCLAUDE_CMD", "fauclaude-custom --opt")
     argv = m._build_argv(a)
     assert argv[:2] == ["fauclaude-custom", "--opt"]
     assert argv[argv.index("--model") + 1] == "deepseek-ai/DeepSeek-V4-Flash-0731"

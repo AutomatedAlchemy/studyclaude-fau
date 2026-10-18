@@ -313,8 +313,8 @@ def _current_backend() -> str:
     Returns:
         The active backend identifier string (``"claude"`` or ``"fauclaude"``).
     """
-    if os.environ.get("LERNCLAUDE_BACKEND"):
-        raw_env = os.environ["LERNCLAUDE_BACKEND"].strip().lower()
+    if os.environ.get("STUDYCLAUDE_BACKEND"):
+        raw_env = os.environ["STUDYCLAUDE_BACKEND"].strip().lower()
         if raw_env in _BACKENDS:
             return raw_env
     return _backend_for_model(_current_model())
@@ -323,14 +323,14 @@ def _current_backend() -> str:
 def _resolve_fauclaude_cmd() -> list[str]:
     """Resolve the command-line argument tokens required to launch fauclaude.
 
-    Looks up ``LERNCLAUDE_FAUCLAUDE_CMD`` or ``FAUCLAUDE_CMD`` first, then checks
+    Looks up ``STUDYCLAUDE_FAUCLAUDE_CMD`` or ``FAUCLAUDE_CMD`` first, then checks
     if ``fauclaude`` exists on ``PATH``, then inspects standard repository
     locations for ``fauclaude/main.py`` and associated Python environments.
 
     Returns:
         List of command argument strings used to spawn fauclaude.
     """
-    custom_command = os.environ.get("LERNCLAUDE_FAUCLAUDE_CMD") or os.environ.get("FAUCLAUDE_CMD")
+    custom_command = os.environ.get("STUDYCLAUDE_FAUCLAUDE_CMD") or os.environ.get("FAUCLAUDE_CMD")
     if custom_command:
         import shlex
         return shlex.split(custom_command)

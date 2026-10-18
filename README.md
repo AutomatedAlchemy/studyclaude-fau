@@ -151,7 +151,7 @@ effort (low | medium | high | xhigh | max); the pick is used as chosen and
 persists in the registry.
 
 Picking a `fau:` model launches through `fauclaude` instead of `claude`, with
-`LERNCLAUDE_BACKEND` forcing the launcher regardless of the model. That path
+`STUDYCLAUDE_BACKEND` forcing the launcher regardless of the model. That path
 needs an NHR@FAU account and `fauclaude` from
 [fau-agents](https://github.com/AutomatedAlchemy/fau-agents). Subagents in
 such a session get no model of their own and run on the session's `fau:` model.

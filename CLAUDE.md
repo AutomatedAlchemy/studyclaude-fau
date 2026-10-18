@@ -439,8 +439,8 @@ The backend follows the model, there is no separate switch (the `b` key and
 models and then the models hosted on the NHR@FAU LLM Gateway (`faullm models`,
 with `_DEFAULT_FAU_MODELS` as the offline fallback). `_backend_for_model` maps
 an Anthropic name to `claude` and anything else to `fauclaude`;
-`LERNCLAUDE_BACKEND` still overrides that for one launch. For `fauclaude` the
-launcher resolves the command via `PATH`, `LERNCLAUDE_FAUCLAUDE_CMD`, the
+`STUDYCLAUDE_BACKEND` still overrides that for one launch. For `fauclaude` the
+launcher resolves the command via `PATH`, `STUDYCLAUDE_FAUCLAUDE_CMD`, the
 sibling `fau-agents/fauclaude/main.py`, or the checkout fau-agents' `--install`
 recorded in `~/.config/fau-agents/checkout`, and passes the picked model
 and effort through — both are always concrete now that `auto` is gone.
