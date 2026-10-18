@@ -194,7 +194,7 @@ course's own board, as the medium file says.
 
 It is a row and a sentinel (`_BEGLEITER_SENTINEL`, in `_SENTINELS`): a valid
 default (`d`, `--set-default begleiter`), shown with ≥1 course, no registry
-state of its own. Added after the 2026-10-02 freeze of v1.0 (see `TODOS.md`).
+state of its own. Added after the 2026-10-02 freeze of v1.0.
 
 ## Quickie: the habit entry, not a second loop
 
