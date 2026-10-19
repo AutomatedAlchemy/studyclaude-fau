@@ -1,7 +1,7 @@
 # Launch modes in detail
 
-The menu and the flags in the [README](../README.md) start six kinds of session.
-A plain course launch just runs that workspace's Lern-Loop. The other five are
+The menu and the flags in the [README](../README.md) start four kinds of session.
+A plain course launch just runs that workspace's Lern-Loop. The other three are
 described here.
 
 ## Begleiter
@@ -31,29 +31,19 @@ It is the automatic default whenever you never chose one, and `d` on its row or
 `studyclaude --set-default begleiter` sets it explicitly. The board „studyclaude“
 holds only the profile; Häppchen go on each course's own board.
 
-## Tutors Choice
+## Dossiers
 
-With two or more courses registered, the menu's top row is **Tutors Choice**.
-Picking it (or running `studyclaude --tutor`) launches one interactive session,
-exactly like starting a course — except its opening message carries a compact,
-mechanically extracted dossier per course (progress line, days since last
+The sessions that work across courses (Begleiter, a Quickie with several
+courses, Gärtner) get a compact, mechanically extracted dossier per course in
+their opening message: progress line, overview status, days since last
 activity, Themenkarte size, created/reviewed Häppchen counts, the dominant
-Fehlermuster, the newest todo.md entry) plus your upcoming exams, and tells it
-to read the strongest candidates' `todo.md` before deciding. The session weighs
-exam proximity against neglect and progress, tells you in one sentence which
-course it picks and why, then reads that course's `CLAUDE.md` and runs its
-Lern-Loop itself. The chooser and the tutor writing your Häppchen are the same
-session — no hidden pre-pass, no wait at the menu. It starts at the courses'
-common parent folder so it can work across all of them.
-
-Tutors Choice can itself be the default: press `d` on its row, or run
-`studyclaude --set-default tutor` — the 10s autostart then runs the tutor pick.
-(Scripted flags like `--dry-run` need a concrete folder and fall back to the
-first course.)
+Fehlermuster, the newest todo.md entry. They read a course's files themselves
+once they have picked it. (Scripted flags like `--dry-run` need a concrete
+folder; with a mode as the default they fall back to the first course.)
 
 ## Quickie
 
-The menu's very top row (shown as soon as one course exists) is **⚡ Quickie**
+The menu's second row (shown as soon as one course exists) is **⚡ Quickie**
 — one short Häppchen, about five minutes, nothing else. It is the low-threshold
 entry for days when a full session feels like too much: pick it (or run
 `studyclaude --quickie`) and the session greets you in one sentence, picks a course
@@ -77,7 +67,7 @@ The Quickie never builds a course overview.
 
 ## Wochenplan
 
-Tutors Choice and the Quickie pick a course on their own. To steer that pick by
+The Begleiter (in free time) and the Quickie pick a course on their own. To steer that pick by
 weekday, write a plain-text rule into `data/wochenplan.md`, next to the registry
 (with `STUDYCLAUDE_REGISTRY` set, next to that file). For example: "Monday to
 Friday the university courses, on weekends the languages; an exam within 7 days
@@ -91,34 +81,6 @@ picks. Without the file, or with an empty one, nothing changes. The file is
 personal and gitignored, like the registry. A Quickie with only one course
 registered has no pick to make and ignores it.
 
-## Meta-Häppchen
-
-A Meta-Häppchen is one short Häppchen in a **target** course, written with the
-other selected **source** courses in view: the session reads each source's
-`fehlermuster.md` in full and the last ten or so dated lines of its `todo.md`,
-then builds a single winnable task in the target's own material that provokes
-the sources' error patterns or reuses what they just practised. Which of the
-two dominates is the session's call. It names in half a sentence which source
-shaped the task, reviews briefly, and asks „Noch eins?“ with the same
-selection. Only the target's files change (its `Fortschritt:` line and a dated
-`todo.md` note naming the sources); the sources are read-only. A launch counts
-as a Quickie day too, so the streak survives a Meta-only day.
-
-In the menu, `Space` on any row opens the multiselect. The first course you
-check is the target (`◉`), further checks are sources (`☑`), `z` moves the
-target to the cursor row, `Enter` launches with a target and at least one
-source, `Esc` goes back. The selection is remembered in the registry (`meta`:
-target, sources, total), and the multiselect opens pre-checked with it next
-time. Once something is remembered, a row `⇄ Meta-Häppchen — Mathe + Spanisch
-→ Physik` appears under Tutors Choice: `Enter` repeats the combination, `d`
-makes it the 10s autostart target (`studyclaude --set-default meta` does the same),
-and it disappears while one of its courses is unregistered.
-
-From a script: `studyclaude --meta ZIEL QUELLE [QUELLE…]` launches and remembers an
-explicit combination (unregistered paths get registered, like `--set-default`);
-bare `studyclaude --meta` reuses the remembered one; `studyclaude --print-prompt --meta …`
-shows the system prompt without launching or remembering.
-
 ## Gärtner
 
 The Gärtner is a maintenance session, not a study session: no Häppchen, no
@@ -129,8 +91,10 @@ dossier and your upcoming exams, greets you, names up to three things it notices
 (two courses on the same subject, a long-idle course, a missing overview) and
 asks what you want to tackle. It starts at the courses' common parent folder.
 
-Courses checked in the multiselect (`Space`) when you press `g` are named as
-the focus; the others are there for comparison and change only when you say so.
+`Space` in the menu opens a multiselect with the course under the cursor
+checked; `Space` toggles a course, `Enter` or `Esc` goes back. Courses checked
+when you press `g` are named as the focus; the others are there for comparison
+and change only when you say so.
 From a script, `studyclaude --gaertner PFAD…` sets the focus; a path that is not
 registered is shown but not registered.
 

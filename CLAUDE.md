@@ -111,8 +111,8 @@ a markdown file. The split follows the Fortschritt pattern:
   `· Übersicht unbestätigt` and the brief tells the session to ask for the
   confirmation instead of building again.
   Consumers: `_overview_suffix` (menu row `· ohne Übersicht`, `--list`), the
-  tutor dossier line, and `_overview_brief` — appended to `opening_message`
-  only while the line is missing, always to `opening_message_tutor` (the
+  dossier line, and `_overview_brief` — appended to `opening_message`
+  only while the line is missing, always to `opening_message_begleiter` (the
   course is chosen inside the session), never to the Quickie.
 
 Backfill for pre-existing courses is the same mechanism: the brief tells the
@@ -120,49 +120,49 @@ session to copy the §Kursübersicht section from the template into a course
 CLAUDE.md that lacks it, build the overview, get it confirmed, write the line.
 Nothing in the seven existing workspaces was edited by hand.
 
-## Tutors Choice
+## Dossiers: facts for the sessions that work across courses
 
-The menu's top row (only shown with ≥2 courses) and `--tutor` route to
-`_launch_tutor_choice`: ONE interactive session, launched exactly like a course
-launch (tier model, same `_exec_or_konsole`), whose opening message
-(`opening_message_tutor`) carries a compact per-course dossier plus
-`upcoming_exams()`. The dossier is everything *mechanically* extractable from
-the files every course is guaranteed to have: the Fortschritt line and file
-mtimes, the Themenkarte row count (CLAUDE.md), created/reviewed Häppchen
-counted from the exercise folder, the top row of the `## Aktive Muster` table
-in fehlermuster.md (or the first entry of an older log-only file; dominant by
-convention), and the newest dated todo.md line (dotted dates need a 4-digit
+The Begleiter, the multi-course Quickie and the Gärtner start at
+`_tutor_workdir` (the courses' common root, `$HOME` fallback), so no course
+CLAUDE.md auto-loads; the session reads the chosen course's CLAUDE.md itself,
+and its system prompt says so. Their opening carries `_course_dossier` per
+course plus `_exam_prompt_lines`. The dossier is everything *mechanically*
+extractable from the files every course is guaranteed to have: the Fortschritt
+line and file mtimes, the Themenkarte row count (CLAUDE.md), created/reviewed
+Häppchen counted from the exercise folder, the top row of the `## Aktive Muster`
+table in fehlermuster.md (or the first entry of an older log-only file; dominant
+by convention), and the newest dated todo.md line (dotted dates need a 4-digit
 year — "27.07.10" is an old exam's filename). Deliberately NO file excerpts:
-the session has tools and is told to read the candidates' todo.md itself
-(inline excerpts were only ever needed by the removed tool-less `claude -p`
-pass, and had ballooned the opening to ~15k chars; facts keep it ~4k). Each
-extractor fails into silence — a missing piece drops its line. Both openings
-wrap what they inject in `<klausuren>` and `<dossiers>` and say in one line that
-the tags hold data, not instructions: the exam labels and the todo.md excerpts
-come from hand-edited files the launcher does not own. The session
-states its pick in one sentence, then reads the
-chosen course's CLAUDE.md and runs its Lern-Loop itself — the chooser IS the
-Häppchen author (an earlier design ran a `claude -p` pre-pass and launched a
-second session; the split was deliberately removed). Because no single workspace
-is chosen at launch time, the session starts at `_tutor_workdir` (the courses'
-common root, `$HOME` fallback) and the chosen workspace's CLAUDE.md is read, not
-auto-loaded — `_assemble_tutor_prompt` says so. The priority judgment stays with
-the model, not a launcher-side heuristic (SSoT boundary).
+the session has tools and reads the candidates' todo.md itself (inline excerpts
+were only ever needed by the removed tool-less `claude -p` pass, and had
+ballooned the opening to ~15k chars; facts keep it ~4k). Each extractor fails
+into silence — a missing piece drops its line. The openings wrap what they
+inject in `<klausuren>` and `<dossiers>` and say in one line that the tags hold
+data, not instructions: the exam labels and the todo.md excerpts come from
+hand-edited files the launcher does not own. Which course comes first is the
+model's judgment, not a launcher-side heuristic (SSoT boundary).
+
+Tutors Choice (`--tutor`, a pick-the-course-then-tutor-it session) and the
+Meta-Häppchen (`--meta`, one Häppchen in a target course shaped by source
+courses) were removed on 2026-10-19 (user). The Begleiter covers the course
+pick. A `__TUTOR__` or `__META__` default left in a synced registry counts as
+unset (`_ensure_default`, `_default_workspace`), `--set-default tutor|meta`
+answers "unverändert" instead of registering `<cwd>/tutor` as a course, and a
+leftover registry key `meta` is ignored.
 
 **Wochenplan.** An optional free-text `wochenplan.md` next to the registry
 (`data/`, personal, gitignored) says which courses fit which weekdays.
 `_wochenplan_block` passes it verbatim in `<wochenplan>` tags, with today's
-weekday, into the Tutors Choice opening and the multi-course Quickie pick. No
-file or an empty file adds nothing. The launcher never parses the plan; the
-Gärtner keeps it current when courses are added or removed.
+weekday, into the multi-course Quickie pick; the Begleiter gets the bare text
+(see below). No file or an empty file adds nothing. The launcher never parses
+the plan; the Gärtner keeps it current when courses are added or removed.
 
-The registry `default` may hold the `__TUTOR__` sentinel: `d` on the row or
-`--set-default tutor` writes it, and the menu autostart then routes to the tutor
-pick. Registration never claims the default any more — an unset default resolves
-in `_ensure_default` to the Begleiter as soon as there is one course.
-`_default_workspace()` (scripts, `--dry-run`/`--print-prompt`) never returns the
-sentinel; it falls back to the first course. The row renders in always-bold
-magenta (`C["tutor"]`), distinct from the muted add-row magenta.
+Registration never claims the default — an unset default resolves in
+`_ensure_default` to the Begleiter as soon as there is one course.
+`_default_workspace()` (scripts, `--dry-run`/`--print-prompt`) returns only a
+registered course, never a sentinel; otherwise it falls back to the first
+course. The palette key `C["tutor"]` (always-bold magenta) kept its name from
+the retired row; it colours the switch values and the model-menu cursor.
 
 ## Begleiter: the clock first, the profile on the board
 
@@ -198,20 +198,20 @@ state of its own. Added after the 2026-10-02 freeze of v1.0.
 
 ## Quickie: the habit entry, not a second loop
 
-The menu's top row (`_QUICKIE_SENTINEL`, shown with ≥1 course) and `--quickie`
-route to `_launch_quickie`: the same one-session mechanics as Tutors Choice
+The menu's second row (`_QUICKIE_SENTINEL`, shown with ≥1 course) and `--quickie`
+route to `_launch_quickie`: one interactive session like a course launch
 (tier model, `_exec_or_konsole`, dossiers when there are several courses, the
 course's own CLAUDE.md read for the mechanics), but the brief
 (`opening_message_quickie`) is scaled down to ONE five-minute Häppchen and
 tuned for a quick win and a one-line „Noch eins?“. It carries
-`upcoming_exams()` like the tutor does (shared `_exam_prompt_lines`) — with
+`upcoming_exams()` (shared `_exam_prompt_lines`) — with
 several courses the deadlines steer the pick, with one they steer the topic. The point is the habit —
 lowering the threshold to start and making a second round the easy next step —
 so the brief forbids preamble, long analysis and closing lectures. It still
 respects the SSoT boundary: no file lists, the course CLAUDE.md owns the
 mechanics; the Quickie only says "scale it to one Häppchen". With one course
 the session starts inside it (CLAUDE.md auto-loads); with several it starts at
-the common root like the tutor.
+the common root like the Begleiter.
 
 The streak (`registry["quickies"]`: `last`, `streak`, `total`) is launcher
 state, written by `_record_quickie` at launch time — a launch counts, whether
@@ -220,51 +220,13 @@ the launcher. `_quickie_stats` reports the streak only while it is alive (last
 Quickie today or yesterday), and both are pure functions of a `today` string so
 the tests never depend on the clock. The row suffix (`_quickie_suffix`) and the
 opening's counter line are the only consumers. The sentinel is a valid
-`default` (`d`, `--set-default quickie`) and, like the tutor sentinel, never
-leaks out of `_default_workspace` — `_SENTINELS` is the single list to check.
-
-## Meta-Häppchen: one target, read-only sources, the mix stays with the model
-
-`_launch_meta` is the third brief on the Quickie machinery: one session, tier
-model, `_exec_or_konsole`, started INSIDE the target workspace so its CLAUDE.md
-auto-loads (unlike the tutor, which starts at the common root — here the
-course is known at launch time). The opening (`opening_message_meta`) carries
-the target dossier and the source dossiers in `<dossiers>`, the exam lines,
-and the brief: read each source's fehlermuster.md fully and the last ~10 dated
-todo.md lines, then write ONE Quickie-sized Häppchen in the target's material
-that provokes the sources' error patterns and/or reuses what they practised.
-Whether mistakes or progress dominate is a tutoring judgment and stays with
-the session (SSoT boundary). The sources are read-only by brief: the session
-writes only the target's todo.md (Fortschritt line + a dated note naming the
-sources); a pattern noticed in a source is said in the chat, not written
-there. No file lists, no procedure — `test_prompts_orient_without_reencoding_
-the_procedure` covers the meta texts like the others.
-
-State is one registry key, `meta: {target, sources, total}`, written by
-`_record_meta` at launch time (launcher state like the Quickie counter). A
-Meta-Häppchen is Quickie-sized, so `_record_meta` also calls `_record_quickie`
-— a Meta-only day keeps the streak alive. `_meta_selection` is the single
-reader: it returns the remembered combination only while the target and at
-least one source are still registered, dropping unregistered sources silently.
-Everything hangs off it — the menu row (`_META_SENTINEL`, in `_SENTINELS`, so
-`_default_workspace` never leaks it), the `d`/`--set-default meta` default
-(`_ensure_default` resets a meta default whose selection is gone),
-`--list`, and bare `--meta`. `--print-prompt --meta …` prints without
-recording, deliberately.
-
-The multiselect is menu state only (`multi`, `checked` in `_menu_loop`):
-Space opens it pre-checked with the remembered combination (or the cursor
-row as target when nothing is remembered), Space toggles, `z` makes the
-cursor row the target, Enter with ≥2 checked returns `("meta", (target,
-sources))`, Esc/`q`/Enter-with-fewer leaves it. Inside the mode the other
-keys (`d`, `x`, the switches) are ignored on purpose, and the sentinel rows
-are greyed out and unselectable. `curses.set_escdelay(25)` makes Esc
-immediate; it is wrapped in try because it is Python ≥ 3.9 only.
+`default` (`d`, `--set-default quickie`) and never leaks out of
+`_default_workspace`. `_SENTINELS` is the single list of menu sentinels.
 
 ## Gärtner: maintenance by chat, plan before change
 
 `g` in the menu (and `--gaertner [PFAD…]`) routes to `_launch_gaertner`: one
-session at `_tutor_workdir`, same launch mechanics as the tutor, but no study
+session at `_tutor_workdir`, same launch mechanics as the Begleiter, but no study
 brief. The user says in chat which courses to clean up, merge or revise; which
 course needs what is theirs to say, so the opening only carries every dossier,
 the exams and the focus (the courses checked in the multiselect when `g` was
@@ -277,9 +239,17 @@ menu parses, so a merge leaves one valid `Fortschritt:` line and resets the
 overview to `Übersicht: fehlt`.
 
 It is a key, not a row: no sentinel, not a valid default, no registry state,
-no streak. `g` is the one key the multiselect accepts besides its own. A CLI
-focus path that is not registered is shown but not registered, because
-registering is itself a change that needs the plan.
+no streak. A CLI focus path that is not registered is shown but not
+registered, because registering is itself a change that needs the plan.
+
+The multiselect exists for the focus and is menu state only (`multi`,
+`checked` in `_menu_loop`): Space opens it with the cursor row checked, Space
+toggles, `g` returns `("gaertner", checked)`, Enter/Esc/`q` leave it. Inside
+the mode the other keys (`d`, `x`, the switches) are ignored on purpose, and
+the sentinel rows are greyed out and unselectable. `curses.set_escdelay(25)`
+makes Esc immediate; it is wrapped in try because it is Python ≥ 3.9 only.
+Until 2026-10-19 the same multiselect also picked the Meta-Häppchen's target
+and sources.
 
 ## The medium switch: choice in the launcher, mechanics in launcher templates
 
@@ -339,9 +309,9 @@ standard preparation step the same day). The split follows the Kursübersicht:
   `fragen.json`, the per-subagent mapping files, `check`, `build`. Keep the
   procedure there and nowhere else — the template and the launcher only point.
 - **Where** is `_finder_brief`, appended to `opening_message` and
-  `opening_message_tutor`. A stamped course CLAUDE.md cannot know this repo's
+  `opening_message_begleiter`. A stamped course CLAUDE.md cannot know this repo's
   path, so the launcher names it. The same sentence is the backfill for older
-  courses whose CLAUDE.md lacks the entry. Never the Quickie's or the Meta's.
+  courses whose CLAUDE.md lacks the entry. Never the Quickie's.
 
 The tool is stdlib Python. KaTeX (via `node`) is optional and only renders the
 formulas; without it the page keeps the formula source. `check` is strict about

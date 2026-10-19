@@ -43,8 +43,8 @@ says what is missing, and the tool still runs by path.
 
 A bare `studyclaude` opens a curses picker of your registered courses, exam banner
 above, progress note per row. The top row is the Begleiter, the default persona.
-`↑`/`↓` move · `Enter` starts · `Space` opens the
-Meta multiselect · `g` Gärtner · `m` medium · `o` model · `e` effort · `d`
+`↑`/`↓` move · `Enter` starts · `Space` marks courses for the
+Gärtner · `g` Gärtner · `m` medium · `o` model · `e` effort · `d`
 default · `x` removes the course from the menu, and on request moves its folder
 into `_archiv/` beside it · `q` quits. Untouched for ten seconds it autostarts your default.
 
@@ -52,16 +52,14 @@ into `_archiv/` beside it · `q` quits. Untouched for ten seconds it autostarts 
 |---|---|
 | `studyclaude <workspace>` | Run that course's Lern-Loop; `--menu` forces the menu instead |
 | `studyclaude --begleiter` | Begleiter (the default): one session over all courses checks the timetable for the current time and helps with what is due — a lecture running now, starting soon or just ended, a deadline, or a Häppchen in free time |
-| `studyclaude --tutor` | Tutors Choice: one session picks the most urgent course from per-course dossiers and tutors it |
 | `studyclaude --quickie` | One short, winnable Häppchen (about 5 min); counts a daily streak |
-| `studyclaude --meta [ZIEL QUELLE…]` | Meta-Häppchen: one short Häppchen in ZIEL shaped by the QUELLE courses; bare reuses the last combination |
 | `studyclaude --gaertner [PFAD…]` | Gärtner: a maintenance session, no studying. You tell it in chat which courses to clean up, merge or revise; the paths are its focus |
 
-Mechanics of the five modes, the streak and the dossiers: [docs/modes.md](docs/modes.md).
+Mechanics of the three modes, the streak and the dossiers: [docs/modes.md](docs/modes.md).
 The Begleiter reads who you are and where your timetable lives from a tab
 „Profil“ on a Tutor Board named „studyclaude“; without it, it asks you in chat
 ([docs/modes.md § Begleiter](docs/modes.md#begleiter)).
-To steer which course the Begleiter, Tutors Choice and the Quickie pick on which weekday, put a
+To steer which course the Begleiter and the Quickie pick on which weekday, put a
 plain-text rule into `data/wochenplan.md` ([docs/modes.md § Wochenplan](docs/modes.md#wochenplan)).
 Other flags: `--list` (`*` marks the default), `--set-default`, `--set-medium`,
 `--set-model`, `--set-effort`, `--add` (guided onboarding), `--register`,
