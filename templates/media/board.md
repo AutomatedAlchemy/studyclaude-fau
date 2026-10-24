@@ -131,8 +131,15 @@ ohne `select_tab`. Eine Korrektur darf auf den Tab verweisen („steht in
   Tab ungerechnet, wird er wieder vorgelegt (§Ankommen), nicht durch einen neuen
   ersetzt. (EP2 2026: drei offene Tabs nebeneinander, eines davon drei Tage
   ungerechnet; User: „räum die Tabs mal auf".)
-- Bauen mit `create_tab(select: false)`, im Fortschritt eintragen, **dann erst**
-  `select_tab` — den User nie mitten im Rechnen wegreißen.
+- Bauen immer mit `create_tab(select: false)` und im Fortschritt eintragen. Wann
+  der User auf den neuen Tab kommt, hängt davon ab, wo er gerade ist:
+  - **Erstes Häppchen der Session** (er kommt gerade an): danach `select_tab`.
+  - **Häppchen nach einem Review:** kein `select_tab`. Er liest gerade die
+    Korrektur, und der Wechsel nähme sie ihm weg (User 24.10.2026: „du bewegst
+    mich immer zum nächsten tab bevor ich mir deine korrektur anschauen
+    konnte"). Am Ende des korrigierten Tabs steht genau EIN `submit`-Knopf
+    „Weiter → H03"; erst sein Klick löst `select_tab` aus. Wechselt er selbst,
+    gilt das genauso.
 - Danach auf die Abgabe warten, siehe §„Auf den User warten".
 
 ## Auf den User warten
@@ -189,8 +196,8 @@ Konvergenz, eine Skizze, die entsteht. Trägt er sie, wird er gebaut, **während
 den Tab schon bearbeitet**, und als Video-Block unten an denselben Tab gehängt. Reine
 Wiedererkennung (Listen, Begriffspaare, Ankreuz-Drills) bekommt keinen Clip.
 
-- **Reihenfolge:** Tab bauen, im Fortschritt eintragen, `select_tab` — **dann** den
-  Clip anstoßen. Der User wartet nie auf einen Render.
+- **Reihenfolge:** Tab bauen, im Fortschritt eintragen, übergeben (§„Häppchen
+  übergeben") — **dann** den Clip anstoßen. Der User wartet nie auf einen Render.
 - **Per Sonnet-Subagent, nicht im eigenen Kontext** (Token-Sparsamkeit; Nutzervorgabe 08.10.2026: Subagenten nie auf Opus): `Agent` mit
   `model: sonnet`, Auftrag = Skill `manim-kit` laden, eine Szene, 15–25 s, eine Idee,
   **1080p bei 60 fps** (`-q h`, manim-kit-Standard; Nutzervorgabe 18.09.2026, nie Draft-Qualität), unter 8 MB je Clip (längere Videos als Einzelclips, nicht herunterkomprimieren), die Standard-Tonspur/Musik des manim-kit **nicht** abbestellen;
@@ -212,6 +219,9 @@ Wiedererkennung (Listen, Begriffspaare, Ankreuz-Drills) bekommt keinen Clip.
   Fehlermuster) bleibt zusätzlich erlaubt, gleiche Mechanik.
 
 ## „Noch eins?“ (Quickie)
+
+Gilt nur im Quickie-Modus. Im Lern-Loop ist das nächste Häppchen beim Klick schon
+gebaut, der Knopf heißt dort „Weiter → Hxx" (§„Häppchen übergeben").
 
 Die Frage nach dem nächsten Quickie gehört **aufs Board, nicht ins Terminal** —
 der User schaut ohnehin dorthin, und ein Klick ist billiger als eine getippte
